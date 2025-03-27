@@ -10,11 +10,11 @@ import SwiftUI
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> DayEntry {
-        DayEntry(date: Date(), emoji: "😀")
+        DayEntry(date: Date())
     }
 
     func getSnapshot(in context: Context, completion: @escaping (DayEntry) -> ()) {
-        let entry = DayEntry(date: Date(), emoji: "😀")
+        let entry = DayEntry(date: Date())
         completion(entry)
     }
 
@@ -26,7 +26,7 @@ struct Provider: TimelineProvider {
         for dayOffset in 0 ..< 7 {
             let entryDate = Calendar.current.date(byAdding: .day, value: dayOffset, to: currentDate)!
             let startOfDate = Calendar.current.startOfDay(for: entryDate)
-            let entry = DayEntry(date: startOfDate, emoji: "😀")
+            let entry = DayEntry(date: startOfDate)
             entries.append(entry)
         }
 
@@ -41,34 +41,39 @@ struct Provider: TimelineProvider {
 
 struct DayEntry: TimelineEntry {
     let date: Date
-    let emoji: String
 }
 
 struct MonthlyWidgetEntryView : View {
     var entry: DayEntry
+    var config: MonthConfig
+    
+    init(entry: DayEntry) {
+        self.entry = entry
+        self.config = MonthConfig.determineConfig(from: entry.date)
+    }
 
     var body: some View {
         ZStack {
             ContainerRelativeShape()
-                .fill(.gray.gradient)
+                .fill(config.backgroundColor.gradient)
             
             VStack {
                 HStack(spacing: 4) {
-                    Text("⛄️")
+                    Text(config.emojiText)
                         .font(.title)
                     
                     Text(entry.date.weekdayDisplayFormat)
                         .font(.title3)
                         .fontWeight(.bold)
                         .minimumScaleFactor(0.6)
-                        .foregroundStyle(.black.opacity(0.6))
+                        .foregroundStyle(config.weekdayTextColor)
                     
                     Spacer()
                 }
                 
                 Text(entry.date.dayDisplayFormat)
                     .font(.system(size: 80, weight: .heavy))
-                    .foregroundStyle(.white.opacity(0.8))
+                    .foregroundStyle(config.dayTextColor)
             }
             .padding()
         }
@@ -98,8 +103,8 @@ struct MonthlyWidget: Widget {
 #Preview(as: .systemSmall) {
     MonthlyWidget()
 } timeline: {
-    DayEntry(date: .now, emoji: "😀")
-    DayEntry(date: .now, emoji: "🤩")
+    DayEntry(date: .now)
+    DayEntry(date: .now)
 }
 
 extension Date {

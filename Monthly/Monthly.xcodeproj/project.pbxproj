@@ -51,6 +51,14 @@
 			);
 			target = 78FC803B2D89B95C00553D18 /* MonthlyWidgetExtension */;
 		};
+		78FC80912D959B1700553D18 /* Exceptions for "MonthlyWidget" folder in "Monthly" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Colors+Ext.swift",
+				MonthConfig.swift,
+			);
+			target = 78FC80262D89B8B800553D18 /* Monthly */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -62,6 +70,7 @@
 		78FC80422D89B95C00553D18 /* MonthlyWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				78FC80912D959B1700553D18 /* Exceptions for "MonthlyWidget" folder in "Monthly" target */,
 				78FC804D2D89B96000553D18 /* Exceptions for "MonthlyWidget" folder in "MonthlyWidgetExtension" target */,
 			);
 			path = MonthlyWidget;
