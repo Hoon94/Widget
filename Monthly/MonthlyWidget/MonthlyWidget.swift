@@ -58,6 +58,10 @@ struct MonthlyWidgetEntryView : View {
             HStack(spacing: 4) {
                 Text(config.emojiText)
                     .font(.title2)
+                    .background(Color.black)
+                    .compositingGroup()
+                    .luminanceToAlpha()
+                    .widgetAccentable()
                 
                 Text(entry.date.weekdayDisplayFormat)
                     .font(.title3)
@@ -75,6 +79,7 @@ struct MonthlyWidgetEntryView : View {
                 .font(.system(size: 80, weight: .heavy))
                 .foregroundStyle(showsBackground ? config.dayTextColor : .white)
                 .contentTransition(.numericText())
+                .widgetAccentable()
         }
         .containerBackground(for: .widget) {
             ContainerRelativeShape()
