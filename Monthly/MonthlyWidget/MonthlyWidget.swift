@@ -44,6 +44,7 @@ struct DayEntry: TimelineEntry {
 }
 
 struct MonthlyWidgetEntryView : View {
+    @Environment(\.showsWidgetContainerBackground) var showsBackground
     var entry: DayEntry
     var config: MonthConfig
     
@@ -53,29 +54,31 @@ struct MonthlyWidgetEntryView : View {
     }
 
     var body: some View {
-        ZStack {
+        VStack {
+            HStack(spacing: 4) {
+                Text(config.emojiText)
+                    .font(.title2)
+                
+                Text(entry.date.weekdayDisplayFormat)
+                    .font(.title3)
+                    .fontWeight(.bold)
+                    .minimumScaleFactor(0.6)
+                    .foregroundStyle(showsBackground ? config.weekdayTextColor : .white)
+                
+                Spacer()
+            }
+            .id(entry.date)
+            .transition(.push(from: .trailing))
+            .animation(.bouncy, value: entry.date)
+            
+            Text(entry.date.dayDisplayFormat)
+                .font(.system(size: 80, weight: .heavy))
+                .foregroundStyle(showsBackground ? config.dayTextColor : .white)
+                .contentTransition(.numericText())
+        }
+        .containerBackground(for: .widget) {
             ContainerRelativeShape()
                 .fill(config.backgroundColor.gradient)
-            
-            VStack {
-                HStack(spacing: 4) {
-                    Text(config.emojiText)
-                        .font(.title)
-                    
-                    Text(entry.date.weekdayDisplayFormat)
-                        .font(.title3)
-                        .fontWeight(.bold)
-                        .minimumScaleFactor(0.6)
-                        .foregroundStyle(config.weekdayTextColor)
-                    
-                    Spacer()
-                }
-                
-                Text(entry.date.dayDisplayFormat)
-                    .font(.system(size: 80, weight: .heavy))
-                    .foregroundStyle(config.dayTextColor)
-            }
-            .padding()
         }
     }
 }
@@ -97,14 +100,17 @@ struct MonthlyWidget: Widget {
         .configurationDisplayName("Monthly Style Widget")
         .description("The theme of the widget changes based on month.")
         .supportedFamilies([.systemSmall])
+        .disfavoredLocations([.standBy], for: [.systemSmall])
     }
 }
 
 #Preview(as: .systemSmall) {
     MonthlyWidget()
 } timeline: {
-    DayEntry(date: .now)
-    DayEntry(date: .now)
+    MockData.dayOne
+    MockData.dayTwo
+    MockData.dayThree
+    MockData.dayFour
 }
 
 extension Date {
@@ -114,5 +120,21 @@ extension Date {
     
     var dayDisplayFormat: String {
         self.formatted(.dateTime.day())
+    }
+}
+
+struct MockData {
+    static let dayOne = DayEntry(date: dateToDisplay(month: 11, day: 4))
+    static let dayTwo = DayEntry(date: dateToDisplay(month: 11, day: 5))
+    static let dayThree = DayEntry(date: dateToDisplay(month: 11, day: 6))
+    static let dayFour = DayEntry(date: dateToDisplay(month: 11, day: 7))
+    
+    static func dateToDisplay(month: Int, day: Int) -> Date {
+        let components = DateComponents(calendar: Calendar.current,
+                                        year: 2025,
+                                        month: month,
+                                        day: day)
+        
+        return Calendar.current.date(from: components)!
     }
 }
