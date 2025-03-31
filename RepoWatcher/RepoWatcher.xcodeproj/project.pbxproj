@@ -44,6 +44,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		78109C512D9AD2DC0022F4F4 /* Exceptions for "RepoWatcher" folder in "RepoWatcherWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Repository.swift,
+			);
+			target = 78568E0E2D99920B002593C5 /* RepoWatcherWidgetExtension */;
+		};
 		78568E202D999210002593C5 /* Exceptions for "RepoWatcherWidget" folder in "RepoWatcherWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -56,6 +63,9 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		78568DFC2D998F53002593C5 /* RepoWatcher */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				78109C512D9AD2DC0022F4F4 /* Exceptions for "RepoWatcher" folder in "RepoWatcherWidgetExtension" target */,
+			);
 			path = RepoWatcher;
 			sourceTree = "<group>";
 		};

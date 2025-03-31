@@ -9,26 +9,18 @@ import WidgetKit
 import SwiftUI
 
 struct Provider: TimelineProvider {
-    func placeholder(in context: Context) -> SimpleEntry {
-        SimpleEntry(date: Date())
+    func placeholder(in context: Context) -> RepoEntry {
+        RepoEntry(date: Date(), repo: Repository.placeholder)
     }
 
-    func getSnapshot(in context: Context, completion: @escaping (SimpleEntry) -> ()) {
-        let entry = SimpleEntry(date: Date())
+    func getSnapshot(in context: Context, completion: @escaping (RepoEntry) -> ()) {
+        let entry = RepoEntry(date: Date(), repo: Repository.placeholder)
         completion(entry)
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
-        var entries: [SimpleEntry] = []
-
-        // Generate a timeline consisting of five entries an hour apart, starting from the current date.
-        let currentDate = Date()
-        for hourOffset in 0 ..< 5 {
-            let entryDate = Calendar.current.date(byAdding: .hour, value: hourOffset, to: currentDate)!
-            let entry = SimpleEntry(date: entryDate)
-            entries.append(entry)
-        }
-
+        var entries: [RepoEntry] = []
+        
         let timeline = Timeline(entries: entries, policy: .atEnd)
         completion(timeline)
     }
@@ -38,12 +30,13 @@ struct Provider: TimelineProvider {
 //    }
 }
 
-struct SimpleEntry: TimelineEntry {
+struct RepoEntry: TimelineEntry {
     let date: Date
+    let repo: Repository
 }
 
 struct RepoWatcherWidgetEntryView : View {
-    var entry: Provider.Entry
+    var entry: RepoEntry
 
     var body: some View {
         HStack {
@@ -52,7 +45,7 @@ struct RepoWatcherWidgetEntryView : View {
                     Circle()
                         .frame(width: 50, height: 50)
                     
-                    Text("Swift News")
+                    Text(entry.repo.name)
                         .font(.title2)
                         .fontWeight(.semibold)
                         .minimumScaleFactor(0.6)
@@ -61,9 +54,9 @@ struct RepoWatcherWidgetEntryView : View {
                 .padding(.bottom, 6)
                 
                 HStack {
-                    StatLabel(value: 999, systemImageName: "star.fill")
-                    StatLabel(value: 999, systemImageName: "tuningfork")
-                    StatLabel(value: 999, systemImageName: "exclamationmark.triangle.fill")
+                    StatLabel(value: entry.repo.watchers, systemImageName: "star.fill")
+                    StatLabel(value: entry.repo.forks, systemImageName: "tuningfork")
+                    StatLabel(value: entry.repo.openIssues, systemImageName: "exclamationmark.triangle.fill")
                 }
             }
             
@@ -108,8 +101,8 @@ struct RepoWatcherWidget: Widget {
 #Preview(as: .systemMedium) {
     RepoWatcherWidget()
 } timeline: {
-    SimpleEntry(date: .now)
-    SimpleEntry(date: .now)
+    RepoEntry(date: .now, repo: Repository.placeholder)
+    RepoEntry(date: .now, repo: Repository.placeholder)
 }
 
 private struct StatLabel: View {
