@@ -10,11 +10,11 @@ import SwiftUI
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> RepoEntry {
-        RepoEntry(date: Date(), repo: Repository.placeholder, avatarImageData: Data())
+        RepoEntry(date: Date(), repo: Repository.placeholder)
     }
 
     func getSnapshot(in context: Context, completion: @escaping (RepoEntry) -> ()) {
-        let entry = RepoEntry(date: Date(), repo: Repository.placeholder, avatarImageData: Data())
+        let entry = RepoEntry(date: Date(), repo: Repository.placeholder)
         completion(entry)
     }
 
@@ -23,9 +23,10 @@ struct Provider: TimelineProvider {
             let nextUpdate = Date().addingTimeInterval(43200) // 12 hours in seconds
             
             do {
-                let repo = try await NetworkManager.shared.getRepo(atUrl: RepoURL.swiftNews)
+                var repo = try await NetworkManager.shared.getRepo(atUrl: RepoURL.publish)
                 let avatarImageData = await NetworkManager.shared.downloadImageData(from: repo.owner.avatarUrl)
-                let entry = RepoEntry(date: .now, repo: repo, avatarImageData: avatarImageData ?? Data())
+                repo.avatarData = avatarImageData ?? Data()
+                let entry = RepoEntry(date: .now, repo: repo)
                 let timeline = Timeline(entries: [entry], policy: .after(nextUpdate))
                 completion(timeline)
             } catch {
@@ -42,7 +43,6 @@ struct Provider: TimelineProvider {
 struct RepoEntry: TimelineEntry {
     let date: Date
     let repo: Repository
-    let avatarImageData: Data
 }
 
 struct RepoWatcherWidgetEntryView : View {
@@ -89,6 +89,6 @@ struct RepoWatcherWidget: Widget {
 #Preview(as: .systemLarge) {
     RepoWatcherWidget()
 } timeline: {
-    RepoEntry(date: .now, repo: Repository.placeholder, avatarImageData: Data())
-    RepoEntry(date: .now, repo: Repository.placeholder, avatarImageData: Data())
+    RepoEntry(date: .now, repo: Repository.placeholder)
+    RepoEntry(date: .now, repo: Repository.placeholder)
 }

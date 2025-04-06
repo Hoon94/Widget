@@ -19,7 +19,7 @@ struct RepoMediumView: View {
         HStack {
             VStack(alignment: .leading) {
                 HStack {
-                    Image(uiImage: UIImage(resource: .avatar))
+                    Image(uiImage: UIImage(data: repo.avatarData) ?? UIImage(resource: .avatar))
                         .resizable()
                         .frame(width: 50, height: 50)
                         .clipShape(Circle())
@@ -67,9 +67,9 @@ struct RepoMediumView: View {
     }
 }
 
-#Preview {
-    RepoMediumView(repo: Repository.placeholder)
-}
+//#Preview {
+//    RepoMediumView(repo: Repository.placeholder)
+//}
 
 private struct StatLabel: View {
     let value: Int
