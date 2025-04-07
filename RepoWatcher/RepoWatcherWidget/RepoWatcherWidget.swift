@@ -10,11 +10,11 @@ import SwiftUI
 
 struct Provider: TimelineProvider {
     func placeholder(in context: Context) -> RepoEntry {
-        RepoEntry(date: Date(), repo: Repository.placeholder)
+        RepoEntry(date: Date(), repo: MockData.repoOne, bottomRepo: MockData.repoTwo)
     }
 
     func getSnapshot(in context: Context, completion: @escaping (RepoEntry) -> ()) {
-        let entry = RepoEntry(date: Date(), repo: Repository.placeholder)
+        let entry = RepoEntry(date: Date(), repo: MockData.repoOne, bottomRepo: MockData.repoTwo)
         completion(entry)
     }
 
@@ -26,7 +26,7 @@ struct Provider: TimelineProvider {
                 var repo = try await NetworkManager.shared.getRepo(atUrl: RepoURL.publish)
                 let avatarImageData = await NetworkManager.shared.downloadImageData(from: repo.owner.avatarUrl)
                 repo.avatarData = avatarImageData ?? Data()
-                let entry = RepoEntry(date: .now, repo: repo)
+                let entry = RepoEntry(date: .now, repo: repo, bottomRepo: nil)
                 let timeline = Timeline(entries: [entry], policy: .after(nextUpdate))
                 completion(timeline)
             } catch {
@@ -43,6 +43,7 @@ struct Provider: TimelineProvider {
 struct RepoEntry: TimelineEntry {
     let date: Date
     let repo: Repository
+    let bottomRepo: Repository?
 }
 
 struct RepoWatcherWidgetEntryView : View {
@@ -56,7 +57,7 @@ struct RepoWatcherWidgetEntryView : View {
         case .systemLarge:
             VStack(spacing: 36) {
                 RepoMediumView(repo: entry.repo)
-                RepoMediumView(repo: entry.repo)
+                RepoMediumView(repo: MockData.repoTwo)
             }
         case .systemSmall, .systemExtraLarge, .accessoryCircular, .accessoryRectangular, .accessoryInline:
             EmptyView()
@@ -89,6 +90,6 @@ struct RepoWatcherWidget: Widget {
 #Preview(as: .systemLarge) {
     RepoWatcherWidget()
 } timeline: {
-    RepoEntry(date: .now, repo: Repository.placeholder)
-    RepoEntry(date: .now, repo: Repository.placeholder)
+    RepoEntry(date: Date(), repo: MockData.repoOne, bottomRepo: MockData.repoTwo)
+    RepoEntry(date: Date(), repo: MockData.repoOne, bottomRepo: MockData.repoTwo)
 }
