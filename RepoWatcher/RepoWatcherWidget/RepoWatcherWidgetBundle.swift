@@ -5,12 +5,13 @@
 //  Created by Daehoon Lee on 3/30/25.
 //
 
-import WidgetKit
 import SwiftUI
+import WidgetKit
 
 @main
 struct RepoWatcherWidgetBundle: WidgetBundle {
     var body: some Widget {
-        RepoWatcherWidget()
+        CompactRepoWatcherWidget()
+        ContributorWidget()
     }
 }
