@@ -47,6 +47,7 @@
 		78109C512D9AD2DC0022F4F4 /* Exceptions for "RepoWatcher" folder in "RepoWatcherWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Contributor.swift,
 				NetworkManager.swift,
 				Repository.swift,
 			);

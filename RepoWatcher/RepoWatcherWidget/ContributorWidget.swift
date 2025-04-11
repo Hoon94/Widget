@@ -38,7 +38,7 @@ struct ContributorEntryView : View {
         VStack {
             RepoMediumView(repo: entry.repo)
             
-            ContributorMediumView()
+            ContributorMediumView(repo: entry.repo)
         }
     }
 }
