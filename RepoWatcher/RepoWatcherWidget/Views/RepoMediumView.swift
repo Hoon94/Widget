@@ -51,12 +51,14 @@ struct RepoMediumView: View {
                     .minimumScaleFactor(0.6)
                     .lineLimit(1)
                     .foregroundStyle(daysSinceLastActivity > 50 ? .pink : .green)
+                    .contentTransition(.numericText())
                 
                 Text("days ago")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }
         }
+        .containerBackground(for: .widget) { }
     }
     
     private func calculateDaysSinceLastActivity(from dateString: String) -> Int {
@@ -67,9 +69,12 @@ struct RepoMediumView: View {
     }
 }
 
-//#Preview {
-//    RepoMediumView(repo: MockData.repoOne)
-//}
+#Preview(as: .systemMedium) {
+    CompactRepoWatcherWidget()
+} timeline: {
+    CompactRepoEntry(date: .now, repo: MockData.repoOne, bottomRepo: nil)
+    CompactRepoEntry(date: .now, repo: MockData.repoOneV2, bottomRepo: nil)
+}
 
 private struct StatLabel: View {
     let value: Int
@@ -79,6 +84,7 @@ private struct StatLabel: View {
         Label {
             Text("\(value)")
                 .font(.footnote)
+                .contentTransition(.numericText())
         } icon: {
             Image(systemName: systemImageName)
                 .foregroundStyle(.green)

@@ -66,13 +66,15 @@ struct CompactRepoWatcherWidgetEntryView : View {
         switch family {
         case .systemMedium:
             RepoMediumView(repo: entry.repo)
+                .containerBackground(for: .widget) { }
         case .systemLarge:
-            VStack(spacing: 36) {
+            VStack(spacing: 76) {
                 RepoMediumView(repo: entry.repo)
                 if let bottomRepo = entry.bottomRepo {
                     RepoMediumView(repo: bottomRepo)
                 }
             }
+            .containerBackground(for: .widget) { }
         case .systemSmall, .systemExtraLarge, .accessoryCircular, .accessoryRectangular, .accessoryInline:
             EmptyView()
         @unknown default:

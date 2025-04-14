@@ -66,8 +66,12 @@ struct ContributorEntryView : View {
         VStack {
             RepoMediumView(repo: entry.repo)
             
+            Spacer()
+                .frame(height: 40)
+            
             ContributorMediumView(repo: entry.repo)
         }
+        .containerBackground(for: .widget) { }
     }
 }
 
@@ -95,4 +99,5 @@ struct ContributorWidget: Widget {
     ContributorWidget()
 } timeline: {
     ContributorEntry(date: .now, repo: MockData.repoOne)
+    ContributorEntry(date: .now, repo: MockData.repoOneV2)
 }
