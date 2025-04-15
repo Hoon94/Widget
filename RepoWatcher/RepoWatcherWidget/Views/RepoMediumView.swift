@@ -19,16 +19,25 @@ struct RepoMediumView: View {
         HStack {
             VStack(alignment: .leading) {
                 HStack {
-                    Image(uiImage: UIImage(data: repo.avatarData) ?? UIImage(resource: .avatar))
-                        .resizable()
-                        .frame(width: 50, height: 50)
-                        .clipShape(Circle())
+                    if #available(iOS 18.0, *) {
+                        Image(uiImage: UIImage(data: repo.avatarData) ?? UIImage(resource: .avatar))
+                            .resizable()
+                            .widgetAccentedRenderingMode(.desaturated)
+                            .frame(width: 50, height: 50)
+                            .clipShape(Circle())
+                    } else {
+                        Image(uiImage: UIImage(data: repo.avatarData) ?? UIImage(resource: .avatar))
+                            .resizable()
+                            .frame(width: 50, height: 50)
+                            .clipShape(Circle())
+                    }
                     
                     Text(repo.name)
                         .font(.title2)
                         .fontWeight(.semibold)
                         .minimumScaleFactor(0.6)
                         .lineLimit(1)
+                        .widgetAccentable()
                 }
                 .padding(.bottom, 6)
                 
@@ -52,6 +61,7 @@ struct RepoMediumView: View {
                     .lineLimit(1)
                     .foregroundStyle(daysSinceLastActivity > 50 ? .pink : .green)
                     .contentTransition(.numericText())
+                    .widgetAccentable()
                 
                 Text("days ago")
                     .font(.caption2)
@@ -85,6 +95,7 @@ private struct StatLabel: View {
             Text("\(value)")
                 .font(.footnote)
                 .contentTransition(.numericText())
+                .widgetAccentable()
         } icon: {
             Image(systemName: systemImageName)
                 .foregroundStyle(.green)

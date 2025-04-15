@@ -28,10 +28,18 @@ struct ContributorMediumView: View {
                       spacing: 20) {
                 ForEach(repo.contributors) { contributor in
                     HStack {
-                        Image(uiImage: UIImage(data: contributor.avatarData) ?? UIImage(resource: .avatar))
-                            .resizable()
-                            .frame(width: 44, height: 44)
-                            .clipShape(Circle())
+                        if #available(iOS 18.0, *) {
+                            Image(uiImage: UIImage(data: contributor.avatarData) ?? UIImage(resource: .avatar))
+                                .resizable()
+                                .widgetAccentedRenderingMode(.desaturated)
+                                .frame(width: 44, height: 44)
+                                .clipShape(Circle())
+                        } else {
+                            Image(uiImage: UIImage(data: contributor.avatarData) ?? UIImage(resource: .avatar))
+                                .resizable()
+                                .frame(width: 44, height: 44)
+                                .clipShape(Circle())
+                        }
                         
                         VStack(alignment: .leading) {
                             Text(contributor.login)
@@ -44,6 +52,7 @@ struct ContributorMediumView: View {
                                 .id(repo.name)
                                 .transition(.push(from: .trailing))
                         }
+                        .widgetAccentable()
                     }
                 }
             }
