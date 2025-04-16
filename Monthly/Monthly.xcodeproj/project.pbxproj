@@ -44,6 +44,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		78F9EEBB2DAFCD5A0030C593 /* Exceptions for "Monthly" folder in "Monthly" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 78FC80262D89B8B800553D18 /* Monthly */;
+		};
 		78FC804D2D89B96000553D18 /* Exceptions for "MonthlyWidget" folder in "MonthlyWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -56,6 +63,7 @@
 			membershipExceptions = (
 				"Colors+Ext.swift",
 				MonthConfig.swift,
+				MonthlyWidgetIntents.intentdefinition,
 			);
 			target = 78FC80262D89B8B800553D18 /* Monthly */;
 		};
@@ -64,6 +72,9 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		78FC80292D89B8B800553D18 /* Monthly */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				78F9EEBB2DAFCD5A0030C593 /* Exceptions for "Monthly" folder in "Monthly" target */,
+			);
 			path = Monthly;
 			sourceTree = "<group>";
 		};
@@ -386,6 +397,7 @@
 				DEVELOPMENT_TEAM = NY2YF9QVXX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Monthly/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -415,6 +427,7 @@
 				DEVELOPMENT_TEAM = NY2YF9QVXX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Monthly/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
