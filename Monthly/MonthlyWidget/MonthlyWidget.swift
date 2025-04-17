@@ -5,23 +5,23 @@
 //  Created by Daehoon Lee on 3/18/25.
 //
 
+import AppIntents
 import SwiftUI
 import WidgetKit
 
-struct Provider: IntentTimelineProvider {
+struct Provider: AppIntentTimelineProvider {
     func placeholder(in context: Context) -> DayEntry {
         DayEntry(date: Date(), showFunFont: false)
     }
     
-    func getSnapshot(for configuration: ChangeFontIntent, in context: Context, completion: @escaping @Sendable (DayEntry) -> Void) {
-        let entry = DayEntry(date: Date(), showFunFont: false)
-        completion(entry)
+    func snapshot(for configuration: ChangeFontIntent, in context: Context) async -> DayEntry {
+        return DayEntry(date: Date(), showFunFont: false)
     }
     
-    func getTimeline(for configuration: ChangeFontIntent, in context: Context, completion: @escaping @Sendable (Timeline<DayEntry>) -> Void) {
+    func timeline(for configuration: ChangeFontIntent, in context: Context) async -> Timeline<DayEntry> {
         var entries: [DayEntry] = []
         
-        let showFunFont = configuration.funFont == 1
+        let showFunFont = configuration.funFont ?? false
         
         // Generate a timeline consisting of seven entries a day apart, starting from the current date.
         let currentDate = Date()
@@ -32,13 +32,8 @@ struct Provider: IntentTimelineProvider {
             entries.append(entry)
         }
         
-        let timeline = Timeline(entries: entries, policy: .atEnd)
-        completion(timeline)
+        return Timeline(entries: entries, policy: .atEnd)
     }
-
-//    func relevances() async -> WidgetRelevances<Void> {
-//        // Generate a list containing the contexts this widget is relevant in.
-//    }
 }
 
 struct DayEntry: TimelineEntry {
@@ -96,10 +91,10 @@ struct MonthlyWidget: Widget {
     let kind: String = "MonthlyWidget"
     
     var body: some WidgetConfiguration {
-        IntentConfiguration(kind: kind, intent: ChangeFontIntent.self, provider: Provider()) { entry in
+        AppIntentConfiguration(kind: kind, intent: ChangeFontIntent.self, provider: Provider()) { entry in
             if #available(iOS 17.0, *) {
                 MonthlyWidgetEntryView(entry: entry)
-                    .containerBackground(.fill.tertiary, for: .widget)
+//                    .containerBackground(.fill.tertiary, for: .widget)
             } else {
                 MonthlyWidgetEntryView(entry: entry)
                     .padding()
@@ -120,6 +115,14 @@ struct MonthlyWidget: Widget {
     MockData.dayTwo
     MockData.dayThree
     MockData.dayFour
+}
+
+struct ChangeFontIntent: AppIntent, WidgetConfigurationIntent {
+    static var title: LocalizedStringResource = "Fun Font"
+    static var description: IntentDescription = .init(stringLiteral: "Switch to a fun font")
+    
+    @Parameter(title: "Fun Font")
+    var funFont: Bool?
 }
 
 extension Date {

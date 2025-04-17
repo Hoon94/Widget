@@ -63,7 +63,6 @@
 			membershipExceptions = (
 				"Colors+Ext.swift",
 				MonthConfig.swift,
-				MonthlyWidgetIntents.intentdefinition,
 			);
 			target = 78FC80262D89B8B800553D18 /* Monthly */;
 		};
