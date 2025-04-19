@@ -79,11 +79,11 @@ struct RepoMediumView: View {
     }
 }
 
-#Preview(as: .systemMedium) {
-    CompactRepoWatcherWidget()
+#Preview(as: .systemLarge) {
+    DoubleRepoWatcherWidget()
 } timeline: {
-    CompactRepoEntry(date: .now, repo: MockData.repoOne, bottomRepo: nil)
-    CompactRepoEntry(date: .now, repo: MockData.repoOneV2, bottomRepo: nil)
+    DoubleRepoEntry(date: .now, topRepo: MockData.repoOne, bottomRepo: MockData.repoTwo)
+    DoubleRepoEntry(date: .now, topRepo: MockData.repoOneV2, bottomRepo: MockData.repoTwo)
 }
 
 private struct StatLabel: View {

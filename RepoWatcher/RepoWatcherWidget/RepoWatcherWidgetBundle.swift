@@ -11,7 +11,7 @@ import WidgetKit
 @main
 struct RepoWatcherWidgetBundle: WidgetBundle {
     var body: some Widget {
-        CompactRepoWatcherWidget()
-        ContributorWidget()
+        SingleRepoWidget()
+        DoubleRepoWatcherWidget()
     }
 }
