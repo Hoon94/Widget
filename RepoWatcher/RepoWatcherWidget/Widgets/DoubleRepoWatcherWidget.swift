@@ -8,28 +8,28 @@
 import SwiftUI
 import WidgetKit
 
-struct DoubleRepoProvider: TimelineProvider {
+struct DoubleRepoProvider: IntentTimelineProvider {
     func placeholder(in context: Context) -> DoubleRepoEntry {
         DoubleRepoEntry(date: Date(), topRepo: MockData.repoOne, bottomRepo: MockData.repoTwo)
     }
-
-    func getSnapshot(in context: Context, completion: @escaping (DoubleRepoEntry) -> ()) {
+    
+    func getSnapshot(for configuration: SelectTwoReposIntent, in context: Context, completion: @escaping @Sendable (DoubleRepoEntry) -> Void) {
         let entry = DoubleRepoEntry(date: Date(), topRepo: MockData.repoOne, bottomRepo: MockData.repoTwo)
         completion(entry)
     }
-
-    func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
+    
+    func getTimeline(for configuration: SelectTwoReposIntent, in context: Context, completion: @escaping @Sendable (Timeline<DoubleRepoEntry>) -> Void) {
         Task {
             let nextUpdate = Date().addingTimeInterval(43200) // 12 hours in seconds
             
             do {
                 // Get Top Repo
-                var topRepo = try await NetworkManager.shared.getRepo(atUrl: RepoURL.publish)
+                var topRepo = try await NetworkManager.shared.getRepo(atUrl: RepoURL.prefix + (configuration.topRepo ?? ""))
                 let topAvatarImageData = await NetworkManager.shared.downloadImageData(from: topRepo.owner.avatarUrl)
                 topRepo.avatarData = topAvatarImageData ?? Data()
                 
                 // Get Bottom Repo
-                var bottomRepo = try await NetworkManager.shared.getRepo(atUrl: RepoURL.google)
+                var bottomRepo = try await NetworkManager.shared.getRepo(atUrl: RepoURL.prefix + (configuration.bottomRepo ?? ""))
                 let bottomAvatarImageData = await NetworkManager.shared.downloadImageData(from: bottomRepo.owner.avatarUrl)
                 bottomRepo.avatarData = bottomAvatarImageData ?? Data()
                 
@@ -70,7 +70,7 @@ struct DoubleRepoWatcherWidget: Widget {
     let kind: String = "DoubleRepoWatcherWidget"
 
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: kind, provider: DoubleRepoProvider()) { entry in
+        IntentConfiguration(kind: kind, intent: SelectTwoReposIntent.self, provider: DoubleRepoProvider()) { entry in
             if #available(iOS 17.0, *) {
                 DoubleRepoWatcherWidgetEntryView(entry: entry)
                     .containerBackground(.fill.tertiary, for: .widget)
