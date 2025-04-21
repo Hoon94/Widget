@@ -80,10 +80,10 @@ struct RepoMediumView: View {
 }
 
 #Preview(as: .systemLarge) {
-    DoubleRepoWatcherWidget()
+    SingleRepoWidget()
 } timeline: {
-    DoubleRepoEntry(date: .now, topRepo: MockData.repoOne, bottomRepo: MockData.repoTwo)
-    DoubleRepoEntry(date: .now, topRepo: MockData.repoOneV2, bottomRepo: MockData.repoTwo)
+    SingleRepoEntry(date: .now, repo: MockData.repoOne)
+    SingleRepoEntry(date: .now, repo: MockData.repoOneV2)
 }
 
 private struct StatLabel: View {

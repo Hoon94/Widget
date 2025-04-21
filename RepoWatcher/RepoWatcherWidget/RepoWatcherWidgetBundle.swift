@@ -12,6 +12,5 @@ import WidgetKit
 struct RepoWatcherWidgetBundle: WidgetBundle {
     var body: some Widget {
         SingleRepoWidget()
-        DoubleRepoWatcherWidget()
     }
 }
