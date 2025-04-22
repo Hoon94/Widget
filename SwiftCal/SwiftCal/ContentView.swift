@@ -5,8 +5,8 @@
 //  Created by Daehoon Lee on 4/22/25.
 //
 
-import SwiftUI
 import CoreData
+import SwiftUI
 
 struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
@@ -16,13 +16,38 @@ struct ContentView: View {
         animation: .default)
     private var days: FetchedResults<Day>
     
+    // ["S", "M", "T", "W", "T", "F", "S"]
+    let daysOfWeek = Calendar.current.veryShortWeekdaySymbols
+    
     var body: some View {
         NavigationView {
-            List {
-                ForEach(days) { day in
-                    Text(day.date!.formatted())
+            VStack {
+                HStack {
+                    ForEach(daysOfWeek, id: \.self) { dayOfWeek in
+                        Text(dayOfWeek)
+                            .fontWeight(.black)
+                            .foregroundStyle(.orange)
+                            .frame(maxWidth: .infinity)
+                    }
                 }
+                
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7)) {
+                    ForEach(days) { day in
+                        Text(day.date?.formatted(.dateTime.day()) ?? Date.now.formatted())
+                            .fontWeight(.bold)
+                            .foregroundStyle(day.didStudy ? .orange : .secondary)
+                            .frame(maxWidth: .infinity, minHeight: 40)
+                            .background {
+                                Circle()
+                                    .foregroundStyle(.orange.opacity(day.didStudy ? 0.3 : 0.0))
+                            }
+                    }
+                }
+                
+                Spacer()
             }
+            .navigationTitle(Date().formatted(.dateTime.month(.wide)))
+            .padding()
         }
     }
 }
