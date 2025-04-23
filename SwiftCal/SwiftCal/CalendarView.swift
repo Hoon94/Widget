@@ -46,6 +46,20 @@ struct CalendarView: View {
                                     Circle()
                                         .foregroundStyle(.orange.opacity(day.didStudy ? 0.3 : 0.0))
                                 }
+                                .onTapGesture {
+                                    if day.date?.dayInt ?? 0 <= Date().dayInt {
+                                        day.didStudy.toggle()
+                                        
+                                        do {
+                                            try viewContext.save()
+                                            print("👆 \(day.date?.dayInt ?? 0) now studied")
+                                        } catch {
+                                            print("Failed to save context")
+                                        }
+                                    } else {
+                                        print("Can't study in the future!!")
+                                    }
+                                }
                         }
                     }
                 }
@@ -66,7 +80,7 @@ struct CalendarView: View {
         }
     }
     
-    func createMonthDays(for date: Date) {
+    private func createMonthDays(for date: Date) {
         for dayOffset in 0..<date.numberOfDaysInMonth {
             let newDay = Day(context: viewContext)
             newDay.date = Calendar.current.date(byAdding: .day, value: dayOffset, to: date.startOfMonth)
