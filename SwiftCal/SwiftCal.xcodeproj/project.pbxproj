@@ -52,11 +52,21 @@
 			);
 			target = 78A0F9B22DB9306E00997D0C /* SwiftCalWidgetExtension */;
 		};
+		78A0F9CE2DBA48AA00997D0C /* Exceptions for "SwiftCal" folder in "SwiftCalWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				CalendarHeaderView.swift,
+			);
+			target = 78A0F9B22DB9306E00997D0C /* SwiftCalWidgetExtension */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		788B87C32DB7DA20000B8BBD /* SwiftCal */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				78A0F9CE2DBA48AA00997D0C /* Exceptions for "SwiftCal" folder in "SwiftCalWidgetExtension" target */,
+			);
 			path = SwiftCal;
 			sourceTree = "<group>";
 		};
