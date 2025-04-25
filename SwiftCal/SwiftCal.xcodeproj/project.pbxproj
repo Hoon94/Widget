@@ -56,6 +56,9 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				CalendarHeaderView.swift,
+				"Date+Ext.swift",
+				Persistence.swift,
+				SwiftCal.xcdatamodeld,
 			);
 			target = 78A0F9B22DB9306E00997D0C /* SwiftCalWidgetExtension */;
 		};
