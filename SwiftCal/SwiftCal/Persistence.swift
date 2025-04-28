@@ -30,9 +30,9 @@ struct PersistenceController {
         let startDate = Calendar.current.dateInterval(of: .month, for: .now)?.start ?? .now
         
         for dayOffset in 0..<30 {
-            let newDay = Day(context: viewContext)
-            newDay.date = Calendar.current.date(byAdding: .day, value: dayOffset, to: startDate)
-            newDay.didStudy = Bool.random()
+            let date = Calendar.current.date(byAdding: .day, value: dayOffset, to: startDate) ?? .now
+            let didStudy = Bool.random()
+            let newDay = Day(date: date, didStudy: didStudy)
         }
         do {
             try viewContext.save()

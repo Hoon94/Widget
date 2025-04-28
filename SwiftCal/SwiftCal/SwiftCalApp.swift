@@ -5,12 +5,22 @@
 //  Created by Daehoon Lee on 4/22/25.
 //
 
+import SwiftData
 import SwiftUI
 
 @main
 struct SwiftCalApp: App {
-    let persistenceController = PersistenceController.shared
     @State private var selectedTab = 0
+    
+    static var sharedStoreURL: URL {
+        let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.io.github.hoon94.SwiftCal")!
+        return container.appending(path: "SwiftCal.sqlite")
+    }
+    
+    let container: ModelContainer = {
+        let config = ModelConfiguration(url: sharedStoreURL)
+        return try! ModelContainer(for: Day.self, configurations: config)
+    }()
     
     var body: some Scene {
         WindowGroup {
@@ -35,7 +45,7 @@ struct SwiftCalApp: App {
 //                    StreakView()
 //                }
             }
-            .environment(\.managedObjectContext, persistenceController.container.viewContext)
+            .modelContainer(container)
             .onOpenURL { url in
                 selectedTab = url.absoluteString == "calendar" ? 0 : 1
             }

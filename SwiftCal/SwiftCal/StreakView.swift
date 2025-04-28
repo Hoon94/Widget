@@ -5,17 +5,15 @@
 //  Created by Daehoon Lee on 4/23/25.
 //
 
-import CoreData
+import SwiftData
 import SwiftUI
 
 struct StreakView: View {
+    @Query(filter: #Predicate<Day> { $0.date > startDate && $0.date < endDate }, sort: \Day.date)
+    private var days: [Day]
     
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Day.date, ascending: true)],
-        predicate: NSPredicate(format: "date BETWEEN { %@, %@ }",
-                               Date().startOfMonth as CVarArg,
-                               Date().endOfMonth as CVarArg))
-    private var days: FetchedResults<Day>
+    static var startDate: Date { .now.startOfMonth }
+    static var endDate: Date { .now.endOfMonth }
     
     @State private var streakValue = 0
     
@@ -37,7 +35,7 @@ struct StreakView: View {
     private func calculateStreakValue() -> Int {
         guard !days.isEmpty else { return 0 }
         
-        let nonFutureDays = days.filter { $0.date?.dayInt ?? 0 <= Date().dayInt }
+        let nonFutureDays = days.filter { $0.date.dayInt <= Date().dayInt }
         
         var streakCount = 0
         
@@ -45,7 +43,7 @@ struct StreakView: View {
             if day.didStudy {
                 streakCount += 1
             } else {
-                if day.date?.dayInt != Date().dayInt {
+                if day.date.dayInt != Date().dayInt {
                     break
                 }
             }
