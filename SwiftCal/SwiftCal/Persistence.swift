@@ -6,6 +6,19 @@
 //
 
 import CoreData
+import SwiftData
+
+struct Persistence {
+    static var container: ModelContainer {
+        let container: ModelContainer = {
+            let sharedStoreURL = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.io.github.hoon94.SwiftCal")!.appending(path: "SwiftCal.sqlite")
+            let config = ModelConfiguration(url: sharedStoreURL)
+            return try! ModelContainer(for: Day.self, configurations: config)
+        }()
+        
+        return container
+    }
+}
 
 struct PersistenceController {
     static let shared = PersistenceController()

@@ -5,6 +5,7 @@
 //  Created by Daehoon Lee on 4/23/25.
 //
 
+import AppIntents
 import SwiftData
 import SwiftUI
 import WidgetKit
@@ -29,23 +30,14 @@ struct Provider: TimelineProvider {
     
     @MainActor
     func fetchDays() -> [Day] {
-        var sharedStoreURL: URL {
-            let container = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.io.github.hoon94.SwiftCal")!
-            return container.appending(path: "SwiftCal.sqlite")
-        }
-        
-        let container: ModelContainer = {
-            let config = ModelConfiguration(url: sharedStoreURL)
-            return try! ModelContainer(for: Day.self, configurations: config)
-        }()
-        
         let startDate = Date().startOfCalendarWithPrefixDays
         let endDate = Date().endOfMonth
         
-        let predicate = #Predicate<Day> { $0.date > startDate && $0.date < endDate }
+        let predicate = #Predicate<Day> { $0.date >= startDate && $0.date < endDate }
         let descriptor = FetchDescriptor<Day> (predicate: predicate, sortBy: [.init(\.date)])
         
-        return try! container.mainContext.fetch(descriptor)
+        let context = ModelContext(Persistence.container)
+        return try! context.fetch(descriptor)
     }
 }
 
@@ -57,21 +49,36 @@ struct CalendarEntry: TimelineEntry {
 struct SwiftCalWidgetEntryView : View {
     var entry: CalendarEntry
     let columns = Array(repeating: GridItem(.flexible()), count: 7)
+    
+    var today: Day {
+        entry.days.filter { Calendar.current.isDate($0.date, inSameDayAs: .now) }.first ?? .init(date: .distantPast, didStudy: false)
+    }
 
     var body: some View {
         HStack {
-            Link(destination: URL(string: "streak")!) {
-                VStack {
-                    Text("\(calculateStreakValue())")
-                        .font(.system(size: 70, design: .rounded))
-                        .bold()
-                        .foregroundStyle(.orange)
-                    
-                    Text("day streak")
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
+            VStack {
+                Link(destination: URL(string: "streak")!) {
+                    VStack {
+                        Text("\(calculateStreakValue())")
+                            .font(.system(size: 70, design: .rounded))
+                            .bold()
+                            .foregroundStyle(.orange)
+                            .contentTransition(.numericText())
+                        
+                        Text("day streak")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
+                    }
                 }
+                
+                Button(today.didStudy ? "Studied" : "Study",
+                       systemImage: today.didStudy ? "checkmark.circle" : "book",
+                       intent: ToggleStudyIntent(date: today.date))
+                    .font(.caption)
+                    .tint(today.didStudy ? .mint : .orange)
+                    .controlSize(.small)
             }
+            .frame(width: 90)
             
             Link(destination: URL(string: "calendar")!) {
                 VStack {
@@ -99,6 +106,7 @@ struct SwiftCalWidgetEntryView : View {
             }
             .padding(.leading, 6)
         }
+        .containerBackground(for: .widget) { }
     }
     
     private func calculateStreakValue() -> Int {
@@ -145,6 +153,5 @@ struct SwiftCalWidget: Widget {
 #Preview(as: .systemMedium) {
     SwiftCalWidget()
 } timeline: {
-    CalendarEntry(date: .now, days: [])
     CalendarEntry(date: .now, days: [])
 }

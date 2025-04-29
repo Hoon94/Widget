@@ -55,6 +55,7 @@
 		78A0F9CE2DBA48AA00997D0C /* Exceptions for "SwiftCal" folder in "SwiftCalWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				AppIntents.swift,
 				CalendarHeaderView.swift,
 				"Date+Ext.swift",
 				Day.swift,
