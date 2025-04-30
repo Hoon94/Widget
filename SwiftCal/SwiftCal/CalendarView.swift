@@ -39,7 +39,12 @@ struct CalendarView: View {
                                 .onTapGesture {
                                     if day.date.dayInt <= Date().dayInt {
                                         day.didStudy.toggle()
+                                        try? context.save()
                                         WidgetCenter.shared.reloadTimelines(ofKind: "SwiftCalWidget")
+                                        
+                                        if #available(iOS 18.0, *) {
+                                            ControlCenter.shared.reloadControls(ofKind: "SwiftCalControl")
+                                        }
                                     } else {
                                         print("Can't study in the future!!")
                                     }

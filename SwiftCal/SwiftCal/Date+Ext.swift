@@ -17,6 +17,10 @@ extension Date {
         Calendar.current.dateInterval(of: .month, for: self)!.end
     }
     
+    var startOfDay: Date {
+        Calendar.current.dateInterval(of: .day, for: self)!.start
+    }
+    
     var endOfDay: Date {
         Calendar.current.dateInterval(of: .day, for: self)!.end
     }

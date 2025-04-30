@@ -18,6 +18,15 @@ struct Persistence {
         
         return container
     }
+    
+    static var currentDay: Day? {
+        let context = ModelContext(Persistence.container)
+        let today = Date()
+        let predicate = #Predicate<Day> { $0.date == today.startOfDay }
+        let descriptor = FetchDescriptor(predicate: predicate)
+        
+        return try? context.fetch(descriptor).first
+    }
 }
 
 struct PersistenceController {
