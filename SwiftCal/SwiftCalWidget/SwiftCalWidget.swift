@@ -15,20 +15,17 @@ struct Provider: TimelineProvider {
         CalendarEntry(date: Date(), days: [])
     }
 
-    @MainActor
     func getSnapshot(in context: Context, completion: @escaping (CalendarEntry) -> ()) {
         let entry = CalendarEntry(date: Date(), days: fetchDays())
         completion(entry)
     }
     
-    @MainActor
     func getTimeline(in context: Context, completion: @escaping (Timeline<Entry>) -> ()) {
         let entry = CalendarEntry(date: Date(), days: fetchDays())
         let timeline = Timeline(entries: [entry], policy: .after(.now.endOfDay))
         completion(timeline)
     }
     
-    @MainActor
     func fetchDays() -> [Day] {
         let startDate = Date().startOfCalendarWithPrefixDays
         let endDate = Date().endOfMonth
@@ -64,6 +61,7 @@ struct SwiftCalWidgetEntryView : View {
                             .bold()
                             .foregroundStyle(.orange)
                             .contentTransition(.numericText())
+                            .widgetAccentable()
                         
                         Text("day streak")
                             .font(.caption)
@@ -77,6 +75,7 @@ struct SwiftCalWidgetEntryView : View {
                     .font(.caption)
                     .tint(today.didStudy ? .mint : .orange)
                     .controlSize(.small)
+                    .widgetAccentable()
             }
             .frame(width: 90)
             
@@ -99,6 +98,7 @@ struct SwiftCalWidgetEntryView : View {
                                             .foregroundStyle(.orange.opacity(day.didStudy ? 0.3 : 0.0))
                                             .scaleEffect(1.5)
                                     }
+                                    .didStudyAccentable(day.didStudy)
                             }
                         }
                     }
