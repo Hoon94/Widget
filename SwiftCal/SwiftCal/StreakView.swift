@@ -9,7 +9,7 @@ import SwiftData
 import SwiftUI
 
 struct StreakView: View {
-    @Query(filter: #Predicate<Day> { $0.date > startDate && $0.date < endDate }, sort: \Day.date)
+    @Query(filter: #Predicate<Day> { $0.date >= startDate && $0.date < endDate }, sort: \Day.date)
     private var days: [Day]
     
     static var startDate: Date { .now.startOfMonth }
