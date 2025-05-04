@@ -54,6 +54,8 @@
 		78C964812DC7920C00126637 /* Exceptions for "BasketballSim" folder in "GameWidgetExtension" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				Assets.xcassets,
+				"Custom Views/Image+Ext.swift",
 				Model/GameState.swift,
 			);
 			target = 78C964672DC78D9900126637 /* GameWidgetExtension */;

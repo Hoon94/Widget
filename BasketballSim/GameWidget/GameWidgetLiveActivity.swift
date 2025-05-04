@@ -14,7 +14,7 @@ struct GameWidgetAttributes: ActivityAttributes {
         // Dynamic stateful properties about your activity go here!
         var gameState: GameState
     }
-
+    
     // Fixed non-changing properties about your activity go here!
     var homeTeam: String
     var awayTeam: String
@@ -24,36 +24,64 @@ struct GameWidgetLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: GameWidgetAttributes.self) { context in
             // Lock screen/banner UI goes here
-            VStack {
-                Text("Hello \(context.state.emoji)")
-            }
-            .activityBackgroundTint(Color.cyan)
-            .activitySystemActionForegroundColor(Color.black)
-
+            LiveActivityView()
+                .activityBackgroundTint(Color.cyan)
+                .activitySystemActionForegroundColor(Color.black)
+            
         } dynamicIsland: { context in
             DynamicIsland {
                 // Expanded UI goes here.  Compose the expanded UI through
                 // various regions, like leading/trailing/center/bottom
                 DynamicIslandExpandedRegion(.leading) {
-                    Text("Leading")
+                    HStack {
+                        Image(.warriors)
+                            .teamLogoModifier(frame: 40)
+                        
+                        Text("100")
+                            .font(.title)
+                            .fontWeight(.semibold)
+                    }
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    Text("Trailing")
+                    HStack {
+                        Text("88")
+                            .font(.title)
+                            .fontWeight(.semibold)
+                        
+                        Image(.bulls)
+                            .teamLogoModifier(frame: 40)
+                    }
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    Text("Bottom \(context.state.emoji)")
-                    // more content
+                    HStack {
+                        Image(.warriors)
+                            .teamLogoModifier(frame: 20)
+                        
+                        Text("S. Curry drains a 3")
+                    }
                 }
                 DynamicIslandExpandedRegion(.center) {
-                    Text("Center \(context.state.emoji)")
-                    // more content
+                    Text("5:24 3Q")
                 }
             } compactLeading: {
-                Text("L")
+                HStack {
+                    Image(.warriors)
+                        .teamLogoModifier()
+                    
+                    Text("100")
+                        .fontWeight(.semibold)
+                }
             } compactTrailing: {
-                Text("T \(context.state.emoji)")
+                HStack {
+                    Text("88")
+                        .fontWeight(.semibold)
+                    
+                    Image(.bulls)
+                        .teamLogoModifier()
+                }
             } minimal: {
-                Text(context.state.emoji)
+                Image(.warriors)
+                    .teamLogoModifier()
             }
             .widgetURL(URL(string: "http://www.apple.com"))
             .keylineTint(Color.red)
@@ -63,23 +91,36 @@ struct GameWidgetLiveActivity: Widget {
 
 extension GameWidgetAttributes {
     fileprivate static var preview: GameWidgetAttributes {
-        GameWidgetAttributes(name: "World")
+        GameWidgetAttributes(homeTeam: "Bulls", awayTeam: "Lakers")
     }
 }
 
 extension GameWidgetAttributes.ContentState {
-    fileprivate static var smiley: GameWidgetAttributes.ContentState {
-        GameWidgetAttributes.ContentState(emoji: "😀")
-     }
-     
-     fileprivate static var starEyes: GameWidgetAttributes.ContentState {
-         GameWidgetAttributes.ContentState(emoji: "🤩")
-     }
+    fileprivate static var sample: GameWidgetAttributes.ContentState {
+        GameWidgetAttributes.ContentState(gameState: GameState(homeScore: 125, awayScore: 125, scoringTeamName: "Lakers", lastAction: "S. Curry drains a 3"))
+    }
 }
 
-#Preview("Notification", as: .content, using: GameWidgetAttributes.preview) {
-   GameWidgetLiveActivity()
+#Preview("Content", as: .content, using: GameWidgetAttributes.preview) {
+    GameWidgetLiveActivity()
 } contentStates: {
-    GameWidgetAttributes.ContentState.smiley
-    GameWidgetAttributes.ContentState.starEyes
+    GameWidgetAttributes.ContentState.sample
+}
+
+#Preview("Expended", as: .dynamicIsland(.expanded), using: GameWidgetAttributes.preview) {
+    GameWidgetLiveActivity()
+} contentStates: {
+    GameWidgetAttributes.ContentState.sample
+}
+
+#Preview("Compact", as: .dynamicIsland(.compact), using: GameWidgetAttributes.preview) {
+    GameWidgetLiveActivity()
+} contentStates: {
+    GameWidgetAttributes.ContentState.sample
+}
+
+#Preview("Minimal", as: .dynamicIsland(.minimal), using: GameWidgetAttributes.preview) {
+    GameWidgetLiveActivity()
+} contentStates: {
+    GameWidgetAttributes.ContentState.sample
 }
