@@ -6,25 +6,14 @@
 //
 
 import ActivityKit
-import WidgetKit
 import SwiftUI
-
-struct GameWidgetAttributes: ActivityAttributes {
-    public struct ContentState: Codable, Hashable {
-        // Dynamic stateful properties about your activity go here!
-        var gameState: GameState
-    }
-    
-    // Fixed non-changing properties about your activity go here!
-    var homeTeam: String
-    var awayTeam: String
-}
+import WidgetKit
 
 struct GameWidgetLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: GameWidgetAttributes.self) { context in
             // Lock screen/banner UI goes here
-            LiveActivityView()
+            LiveActivityView(context: context)
                 .activityBackgroundTint(Color.cyan)
                 .activitySystemActionForegroundColor(Color.black)
             
@@ -34,53 +23,57 @@ struct GameWidgetLiveActivity: Widget {
                 // various regions, like leading/trailing/center/bottom
                 DynamicIslandExpandedRegion(.leading) {
                     HStack {
-                        Image(.warriors)
+                        Image(context.attributes.homeTeam)
                             .teamLogoModifier(frame: 40)
+                            .contentTransition(.identity)
                         
-                        Text("100")
+                        Text("\(context.state.gameState.homeScore)")
                             .font(.title)
                             .fontWeight(.semibold)
                     }
                 }
                 DynamicIslandExpandedRegion(.trailing) {
                     HStack {
-                        Text("88")
+                        Text("\(context.state.gameState.awayScore)")
                             .font(.title)
                             .fontWeight(.semibold)
                         
-                        Image(.bulls)
+                        Image(context.attributes.awayTeam)
                             .teamLogoModifier(frame: 40)
+                            .contentTransition(.identity)
                     }
                 }
                 DynamicIslandExpandedRegion(.bottom) {
                     HStack {
-                        Image(.warriors)
+                        Image(context.state.gameState.scoringTeamName)
                             .teamLogoModifier(frame: 20)
                         
-                        Text("S. Curry drains a 3")
+                        Text(context.state.gameState.lastAction)
                     }
                 }
-                DynamicIslandExpandedRegion(.center) {
-                    Text("5:24 3Q")
-                }
+//                DynamicIslandExpandedRegion(.center) {
+//                    Text("5:24 3Q")
+//                }
             } compactLeading: {
                 HStack {
-                    Image(.warriors)
+                    Image(context.attributes.homeTeam)
                         .teamLogoModifier()
+                        .contentTransition(.identity)
                     
-                    Text("100")
+                    Text("\(context.state.gameState.homeScore)")
                         .fontWeight(.semibold)
                 }
             } compactTrailing: {
                 HStack {
-                    Text("88")
+                    Text("\(context.state.gameState.awayScore)")
                         .fontWeight(.semibold)
                     
-                    Image(.bulls)
+                    Image(context.attributes.awayTeam)
                         .teamLogoModifier()
+                        .contentTransition(.identity)
                 }
             } minimal: {
-                Image(.warriors)
+                Image(context.state.gameState.winningTeamName)
                     .teamLogoModifier()
             }
             .widgetURL(URL(string: "http://www.apple.com"))
@@ -91,13 +84,13 @@ struct GameWidgetLiveActivity: Widget {
 
 extension GameWidgetAttributes {
     fileprivate static var preview: GameWidgetAttributes {
-        GameWidgetAttributes(homeTeam: "Bulls", awayTeam: "Lakers")
+        GameWidgetAttributes(homeTeam: "warriors", awayTeam: "bulls")
     }
 }
 
 extension GameWidgetAttributes.ContentState {
     fileprivate static var sample: GameWidgetAttributes.ContentState {
-        GameWidgetAttributes.ContentState(gameState: GameState(homeScore: 125, awayScore: 125, scoringTeamName: "Lakers", lastAction: "S. Curry drains a 3"))
+        GameWidgetAttributes.ContentState(gameState: GameState(homeScore: 125, awayScore: 125, scoringTeamName: "warriors", lastAction: "S. Curry drains a 3"))
     }
 }
 
