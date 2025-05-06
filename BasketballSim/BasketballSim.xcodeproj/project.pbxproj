@@ -61,12 +61,20 @@
 			);
 			target = 78C964672DC78D9900126637 /* GameWidgetExtension */;
 		};
+		78C9648C2DCA57F400126637 /* Exceptions for "BasketballSim" folder in "BasketballSim" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 78C964452DC64E1800126637 /* BasketballSim */;
+		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		78C964482DC64E1800126637 /* BasketballSim */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				78C9648C2DCA57F400126637 /* Exceptions for "BasketballSim" folder in "BasketballSim" target */,
 				78C964812DC7920C00126637 /* Exceptions for "BasketballSim" folder in "GameWidgetExtension" target */,
 			);
 			path = BasketballSim;
@@ -391,6 +399,7 @@
 				DEVELOPMENT_TEAM = NY2YF9QVXX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BasketballSim/Info.plist;
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -420,6 +429,7 @@
 				DEVELOPMENT_TEAM = NY2YF9QVXX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = BasketballSim/Info.plist;
 				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
