@@ -24,9 +24,10 @@ final class GameModel: ObservableObject, GameSimulatorDelegate {
     func startLiveActivity() {
         let attributes = GameWidgetAttributes(homeTeam: "warriors", awayTeam: "bulls")
         let currentGameState = GameWidgetAttributes.ContentState(gameState: gameState)
+        let activityContent = ActivityContent(state: currentGameState, staleDate: nil)
         
         do {
-            liveActivity = try Activity.request(attributes: attributes, contentState: currentGameState)
+            liveActivity = try Activity.request(attributes: attributes, content: activityContent)
         } catch {
             print(error.localizedDescription)
         }
@@ -34,15 +35,18 @@ final class GameModel: ObservableObject, GameSimulatorDelegate {
     
     func didUpdate(gameState: GameState) {
         self.gameState = gameState
+        let currentGameState = GameWidgetAttributes.ContentState(gameState: gameState)
+        let activityContent = ActivityContent(state: currentGameState, staleDate: nil)
         
         Task {
-            await liveActivity?.update(using: .init(gameState: gameState))
+            await liveActivity?.update(activityContent)
         }
     }
     
     func didCompleteGame() {
         Task {
-            await liveActivity?.end(using: .init(gameState: simulator.endGame()))
+            let finalContent = GameWidgetAttributes.ContentState(gameState: simulator.endGame())
+            await liveActivity?.end(ActivityContent(state: finalContent, staleDate: nil))
         }
     }
 }
